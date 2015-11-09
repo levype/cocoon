@@ -1,3 +1,3 @@
 class Location < ActiveRecord::Base
-  has_many :joinlocations
+  has_many :joinlocationtousers
 end
