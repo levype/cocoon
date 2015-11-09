@@ -28,3 +28,9 @@ group :production do
   gem 'rails_12factor'
   gem 'puma'
 end
+
+# Gem for authorization
+gem "pundit"
+
+# Gem for Facebook
+gem 'omniauth-facebook'
