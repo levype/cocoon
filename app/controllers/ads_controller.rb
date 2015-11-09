@@ -52,41 +52,9 @@ class AdsController < ApplicationController
   end
 
   def show
-    @owner = User.find(@ad.user_id)
-    @ad_review = adReview.new
   end
 
-  def new
-    @ad = Ad.new
-    @ad.price = @params["area"].to_i * 4
-    # 2.times { @ad.photos.build }
-  end
 
-  def create
-    @params = ad_params
-    @ad = Ad.new(ad_params)
-    # raise
-    @ad.photos.build
-    # @ad.photos.each { |photo| photo.build }
-    # @ad.build_photo
-
-    if @ad.save
-      redirect_to ad_path(@ad)
-    else
-      render :new
-    end
-  end
-
-  def edit
-  end
-
-  def update
-    if @ad.update(ad_params)
-      redirect_to root_path
-    else
-      render :edit
-    end
-  end
 
   private
   def set_ad
@@ -122,12 +90,7 @@ class AdsController < ApplicationController
     }
 
 
-
   end
 
-  def ad_params
-    params.require(:ad).permit(:title, :description, :price, :space,
-      :rooms, :link, :site, :landlord_name, :landlord_tel, :landlord_email)
-  end
 
 end
