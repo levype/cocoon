@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109112301) do
+ActiveRecord::Schema.define(version: 20151109114631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "adds", force: :cascade do |t|
+  create_table "ads", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
     t.integer  "price"
@@ -27,15 +27,15 @@ ActiveRecord::Schema.define(version: 20151109112301) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "joinlocations", force: :cascade do |t|
+  create_table "joinlocationstousers", force: :cascade do |t|
     t.integer  "location_id"
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
-  add_index "joinlocations", ["location_id"], name: "index_joinlocations_on_location_id", using: :btree
-  add_index "joinlocations", ["user_id"], name: "index_joinlocations_on_user_id", using: :btree
+  add_index "joinlocationstousers", ["location_id"], name: "index_joinlocationstousers_on_location_id", using: :btree
+  add_index "joinlocationstousers", ["user_id"], name: "index_joinlocationstousers_on_user_id", using: :btree
 
   create_table "landlords", force: :cascade do |t|
     t.string   "name"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20151109112301) do
   create_table "locations", force: :cascade do |t|
     t.string   "name"
     t.integer  "insee"
-    t.integer  "CP"
+    t.integer  "cp"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -85,8 +85,8 @@ ActiveRecord::Schema.define(version: 20151109112301) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.integer  "minimal_rent"
-    t.integer  "max_rent"
+    t.integer  "min_price"
+    t.integer  "max_price"
     t.integer  "min_space"
     t.integer  "max_space"
     t.integer  "min_room"
@@ -99,9 +99,9 @@ ActiveRecord::Schema.define(version: 20151109112301) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  add_foreign_key "joinlocations", "locations"
-  add_foreign_key "joinlocations", "users"
-  add_foreign_key "photos", "adds"
-  add_foreign_key "pings", "adds"
+  add_foreign_key "joinlocationstousers", "locations"
+  add_foreign_key "joinlocationstousers", "users"
+  add_foreign_key "photos", "ads", column: "add_id"
+  add_foreign_key "pings", "ads", column: "add_id"
   add_foreign_key "pings", "users"
 end
