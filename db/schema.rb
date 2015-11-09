@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109120807) do
+ActiveRecord::Schema.define(version: 20151109121105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,10 +23,13 @@ ActiveRecord::Schema.define(version: 20151109120807) do
     t.integer  "space"
     t.integer  "rooms"
     t.string   "link"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.integer  "location_id"
     t.string   "site"
+    t.string   "landlord_name"
+    t.string   "landlord_tel"
+    t.string   "landlord_email"
   end
 
   add_index "ads", ["location_id"], name: "index_ads_on_location_id", using: :btree
