@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109103403) do
+ActiveRecord::Schema.define(version: 20151109112301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,15 +25,30 @@ ActiveRecord::Schema.define(version: 20151109103403) do
     t.string   "link"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.integer  "landlord_id"
   end
 
-  add_index "adds", ["landlord_id"], name: "index_adds_on_landlord_id", using: :btree
+  create_table "joinlocations", force: :cascade do |t|
+    t.integer  "location_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "joinlocations", ["location_id"], name: "index_joinlocations_on_location_id", using: :btree
+  add_index "joinlocations", ["user_id"], name: "index_joinlocations_on_user_id", using: :btree
 
   create_table "landlords", force: :cascade do |t|
     t.string   "name"
     t.string   "tel"
     t.string   "mail"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "insee"
+    t.integer  "CP"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -77,12 +92,15 @@ ActiveRecord::Schema.define(version: 20151109103403) do
     t.integer  "min_room"
     t.integer  "max_room"
     t.boolean  "furnished"
+    t.boolean  "house"
+    t.boolean  "flat"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  add_foreign_key "adds", "landlords"
+  add_foreign_key "joinlocations", "locations"
+  add_foreign_key "joinlocations", "users"
   add_foreign_key "photos", "adds"
   add_foreign_key "pings", "adds"
   add_foreign_key "pings", "users"
