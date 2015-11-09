@@ -11,10 +11,51 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109094811) do
+ActiveRecord::Schema.define(version: 20151109103403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "adds", force: :cascade do |t|
+    t.string   "title"
+    t.text     "description"
+    t.integer  "price"
+    t.integer  "space"
+    t.integer  "rooms"
+    t.string   "link"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "landlord_id"
+  end
+
+  add_index "adds", ["landlord_id"], name: "index_adds_on_landlord_id", using: :btree
+
+  create_table "landlords", force: :cascade do |t|
+    t.string   "name"
+    t.string   "tel"
+    t.string   "mail"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "photos", force: :cascade do |t|
+    t.integer  "add_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "photos", ["add_id"], name: "index_photos_on_add_id", using: :btree
+
+  create_table "pings", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "add_id"
+    t.string   "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "pings", ["add_id"], name: "index_pings_on_add_id", using: :btree
+  add_index "pings", ["user_id"], name: "index_pings_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -29,9 +70,20 @@ ActiveRecord::Schema.define(version: 20151109094811) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.integer  "minimal_rent"
+    t.integer  "max_rent"
+    t.integer  "min_space"
+    t.integer  "max_space"
+    t.integer  "min_room"
+    t.integer  "max_room"
+    t.boolean  "furnished"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "adds", "landlords"
+  add_foreign_key "photos", "adds"
+  add_foreign_key "pings", "adds"
+  add_foreign_key "pings", "users"
 end
